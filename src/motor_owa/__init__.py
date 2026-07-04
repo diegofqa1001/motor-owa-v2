@@ -19,7 +19,7 @@ Version 2, independiente del paquete anterior ``owa-adaptive``. Novedades:
    consistencia ordinal, particion 70-20-10.
 """
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 from .config import Anchors, EngineConfig
 from .latent import (phi, phi_inv, octile_orness, octile_z, classify_z,
@@ -29,5 +29,7 @@ from .quantifiers import rim_weights, exponent_for_orness, weights_for_orness
 from .profiles import PROFILE_NAMES, DIMENSIONS, Profile, all_profiles, get_profile
 from .portfolio import PortfolioBuilder, PortfolioResult
 from .adaptive import InvestorState, surprise, update_latent, harvest_and_recalibrate
+from .elicitation import (QUESTIONNAIRE, declared_z, scores_from_z,
+                          simulate_declared_scores, emotional_gap_metrics)
 from .validation import (rmse, mae, mape, ndcg_at_k, mrr, ordinal_consistency,
                          split_70_20_10, coherence_spearman)

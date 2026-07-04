@@ -63,9 +63,15 @@ def update_latent(z: float, s: float, kappa: float = 0.25,
 
 @dataclass
 class InvestorState:
-    """Estado dinamico del inversor: latente, perfil y trazabilidad."""
+    """Estado dinamico del inversor: latente, perfil, capital y trazabilidad.
+
+    wealth: capital del decisor (el "valor" que el define); se actualiza
+    con cada cosecha. horizon_days: horizonte que el decisor elige.
+    """
     z: float
     anchors: Anchors = Anchors.OCTILES
+    wealth: float = 1.0
+    horizon_days: Optional[int] = None
     history: List[dict] = field(default_factory=list)
 
     @property
@@ -91,21 +97,45 @@ class InvestorState:
 
 def harvest_and_recalibrate(state: InvestorState, realized: float,
                             expected: float, expected_vol: float,
-                            cfg: Optional[EngineConfig] = None) -> InvestorState:
+                            cfg: Optional[EngineConfig] = None,
+                            declared_scores: Optional[dict] = None
+                            ) -> InvestorState:
     """Cierra un horizonte: registra la cosecha y recalibra el perfil.
 
-    Devuelve el MISMO objeto (mutado) para encadenar ciclos. Registra en
-    ``state.history`` la trazabilidad completa (auditable): sorpresa,
-    z antes/despues, perfil antes/despues y si hubo migracion.
+    Dos canales de recalibracion (ajuste v2.1, "el decisor manda"):
+
+    - AUTOMATICO (sin ``declared_scores``): la latente se actualiza con la
+      regla del modelo (sorpresa acotada y asimetrica). Es la prediccion
+      "logica" de la reaccion.
+    - DECLARADO (con ``declared_scores``): el inversor VUELVE A RESPONDER
+      el cuestionario tras ver el resultado frente a la proyeccion; su
+      respuesta fija la nueva latente (la decision es del decisor, no del
+      modelo). El modelo calcula igualmente su prediccion y registra la
+      BRECHA EMOCIONAL epsilon = z_declarada - z_modelo, que cuantifica
+      cuanto de la reaccion NO es explicable por la logica del modelo.
+
+    Devuelve el MISMO objeto (mutado). ``state.wealth`` se capitaliza con
+    el retorno realizado. Trazabilidad completa en ``state.history``.
     """
+    from .elicitation import declared_z as _declared_z
     cfg = cfg or EngineConfig()
     k_before, z_before = state.k, state.z
     s = surprise(realized, expected, expected_vol)
-    state.z = update_latent(z_before, s, cfg.kappa, cfg.loss_lambda)
+    z_model = update_latent(z_before, s, cfg.kappa, cfg.loss_lambda)
+    epsilon = None
+    if declared_scores is not None:
+        z_dec = _declared_z(declared_scores)
+        epsilon = float(z_dec - z_model)
+        state.z = float(np.clip(z_dec, -Z_CAP, Z_CAP))
+    else:
+        state.z = z_model
+    state.wealth *= (1.0 + float(realized))
     state.history.append({
         "realized": realized, "expected": expected,
         "expected_vol": expected_vol, "surprise": s,
-        "z_before": z_before, "z_after": state.z,
+        "z_before": z_before, "z_model": z_model, "z_after": state.z,
+        "epsilon": epsilon, "declared": declared_scores is not None,
+        "wealth": state.wealth,
         "k_before": k_before, "k_after": state.k,
         "migrated": state.k != k_before,
     })

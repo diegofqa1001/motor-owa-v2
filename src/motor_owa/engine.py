@@ -42,6 +42,9 @@ class CycleRecord:
     realized_return: float
     surprise: float
     migrated: bool
+    projection: Optional[dict] = None   # proyeccion inicial mostrada al decisor
+    evaluation: Optional[dict] = None   # resultado vs proyeccion (para el decisor)
+    epsilon: Optional[float] = None     # brecha emocional (si hubo declaracion)
 
 
 class RecommendationEngine:
@@ -63,20 +66,48 @@ class RecommendationEngine:
         gross = float((px.iloc[t2] / px.iloc[t] - 1.0) @ weights.values)
         return gross - self.cfg.tc_bps / 1e4
 
-    def run_cycle(self, state: InvestorState, t: int) -> CycleRecord:
-        """Un ciclo completo para un inversor con estado dinamico."""
+    def run_cycle(self, state: InvestorState, t: int,
+                  declared_scores: Optional[dict] = None,
+                  horizon: Optional[int] = None) -> CycleRecord:
+        """Un ciclo completo para un inversor con estado dinamico.
+
+        Flujo del decisor (ajuste v2.1): el motor clasifica (cuestionario),
+        recomienda la cartera del perfil, el inversor define valor
+        (``state.wealth``) y tiempo (``horizon``), y al cierre el motor
+        construye la EVALUACION resultado-vs-proyeccion que se muestra al
+        decisor. Si el decisor re-responde el cuestionario
+        (``declared_scores``), su declaracion reclasifica el perfil y se
+        registra la brecha emocional; si no, opera el canal automatico.
+        """
         prof_before = state.profile.name
+        wealth_before = state.wealth
         port = self.builder.build(state.profile, t)
-        h = self.cfg.horizon
+        h = int(horizon or state.horizon_days or self.cfg.horizon)
         r = self.realized_return(port.weights, t, h)
         mu_h = port.expected_return * h / _ANNUAL
         sig_h = port.expected_vol * np.sqrt(h / _ANNUAL)
-        harvest_and_recalibrate(state, r, mu_h, sig_h, self.cfg)
+        projection = {"expected_return_h": mu_h, "expected_vol_h": sig_h,
+                      "expected_value": wealth_before * (1 + mu_h),
+                      "range_1sd": (wealth_before * (1 + mu_h - sig_h),
+                                    wealth_before * (1 + mu_h + sig_h)),
+                      "horizon_days": h}
+        harvest_and_recalibrate(state, r, mu_h, sig_h, self.cfg,
+                                declared_scores=declared_scores)
         rec = state.history[-1]
+        evaluation = {"realized_return_h": r,
+                      "final_value": state.wealth,
+                      "vs_expected": r - mu_h,
+                      "surprise_sd": rec["surprise"],
+                      "within_1sd": bool(abs(r - mu_h) <= sig_h),
+                      "verdict": ("supero la proyeccion" if rec["surprise"] > 0.25
+                                  else "por debajo de la proyeccion"
+                                  if rec["surprise"] < -0.25
+                                  else "en linea con la proyeccion")}
         return CycleRecord(t=t, profile_before=prof_before,
                            profile_after=state.profile.name, portfolio=port,
                            realized_return=r, surprise=rec["surprise"],
-                           migrated=rec["migrated"])
+                           migrated=rec["migrated"], projection=projection,
+                           evaluation=evaluation, epsilon=rec["epsilon"])
 
     def simulate_investor(self, state: InvestorState, t0: int,
                           n_cycles: int) -> List[CycleRecord]:
