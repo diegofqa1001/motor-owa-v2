@@ -17,9 +17,13 @@ conductuales de riesgo* (Universidad Nacional de Colombia, Sede Manizales).
    (`Q(r)=r^β`, m = 4 criterios del anteproyecto) **estratificada por
    volatilidad**, con volatilidad objetivo creciente en el orness
    → **8 carteras, coherencia riesgo-perfil = +1 por construcción**.
-3. **Recalibra** el perfil al cierre de cada horizonte: la sorpresa
-   (resultado vs. expectativa) actualiza la latente z con asimetría de
-   aversión a la pérdida (λ = 2.25) y puede **migrar** al inversor de perfil.
+3. **Recalibra** el perfil al cierre de cada horizonte con **el decisor al
+   mando (v2.1)**: el motor muestra el resultado frente a la proyección
+   inicial y el inversor **vuelve a responder el cuestionario**; su
+   declaración reclasifica el perfil. En paralelo el modelo predice la
+   reacción "lógica" (sorpresa acotada, λ = 2.25) y registra la **brecha
+   emocional ε = z_declarada − z_modelo**, que valida que la decisión no
+   es puramente lógica. Sin declaración, opera el canal automático.
 4. **Valida** internamente según el anteproyecto: RMSE, MAE, MAPE, NDCG@k,
    MRR, consistencia ordinal, partición 70-20-10, coherencia Spearman.
 
@@ -36,19 +40,20 @@ src/motor_owa/
   criteria.py        matriz de decisión [activos × 4] normalizada [0,1]
   portfolio.py       8 carteras con volatilidad objetivo (coherencia +1)
   adaptive.py        sorpresa → actualización latente → migración de perfil
+  elicitation.py     cuestionario operativo, canal declarado, brecha emocional ε
   engine.py          ciclo completo + backtest de panel 70-20-10
   validation.py      RMSE, MAE, MAPE, NDCG@k, MRR, consistencia ordinal
   data.py            yfinance CO/US, CSV, panel sintético (solo tests)
   viz.py             figuras Okabe-Ito, fondo blanco, 300 dpi
 scripts/run_demo.py  demo de un comando
-tests/               41 pruebas pytest
+tests/               49 pruebas pytest
 ```
 
 ## Inicio rápido
 
 ```bash
 pip install -e ".[data,dev]"
-pytest                      # 41 tests
+pytest                      # 49 tests
 python scripts/run_demo.py            # demo offline (panel sintético)
 python scripts/run_demo.py --market co   # Colombia (BVC, anteproyecto)
 python scripts/run_demo.py --market us   # EE. UU. (robustez)
