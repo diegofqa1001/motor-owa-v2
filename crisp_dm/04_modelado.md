@@ -24,8 +24,25 @@ Arquitectura de cinco componentes (anteproyecto, Obj. 3), versión 2:
    Garantiza Spearman(orness, σ) = +1 **por construcción**, corrigiendo la
    inversión conductual de la vía de criterios pura (hallazgo del Art. 3).
 
-5. **Capa de adaptabilidad.** Al cierre de cada horizonte: sorpresa
-   estandarizada `s = (R − μ)/σ`; actualización latente asimétrica
-   `z ← z + κ·tanh(s)` (ganancias) o `z ← z + κ·λ·tanh(s)` (pérdidas,
-   λ = 2.25, Tversky & Kahneman, 1992); recategorización si z cruza la
-   frontera de su octil. Trazabilidad completa en `InvestorState.history`.
+5. **Capa de adaptabilidad — el decisor manda (v2.1).** Dos canales:
+
+   - **Canal declarado (principal).** Como en la práctica bancaria, el
+     motor PREGUNTA (cuestionario de 7 dimensiones, `elicitation.QUESTIONNAIRE`),
+     clasifica y recomienda; el inversor define **valor** (`wealth`) y
+     **tiempo** (`horizon`); al cierre el motor muestra la **evaluación
+     resultado-vs-proyección** (`CycleRecord.projection/evaluation`) y el
+     inversor **vuelve a responder** el cuestionario con su sentimiento e
+     información nueva. Su declaración fija la nueva latente y reclasifica
+     el perfil: la decisión es del decisor, no del modelo.
+   - **Canal automático (predicción "lógica").** En paralelo, el modelo
+     calcula su predicción: sorpresa `s = (R − μ)/σ` y actualización
+     asimétrica `z_modelo = z + κ·Λ(s)·tanh(s)` (λ = 2.25, Tversky &
+     Kahneman, 1992). Si no hay declaración, este canal opera solo.
+
+   La **brecha emocional** `ε = z_declarada − z_modelo` queda registrada
+   en cada ciclo: cuantifica cuánto de la reclasificación NO es explicable
+   por la reacción "lógica" a la sorpresa — la validación de que la
+   decisión es también emocional (`elicitation.emotional_gap_metrics`,
+   con censura del tramo saturado del instrumento). Recategorización si z
+   cruza la frontera de su octil; trazabilidad completa en
+   `InvestorState.history`.
