@@ -5,9 +5,9 @@ Arquitectura de cinco componentes (anteproyecto, Obj. 3), versión 2:
 1. **Entrada de perfiles difusos → parámetro adaptativo.**
    Latente z ~ N(0,1); 8 perfiles = octiles; ancla del perfil k:
    `orness_k = Φ(z_k) = (2k−1)/16` (derivada, no asertada). El puente
-   cuestionario → z es `latent.latent_from_dimensions` (7 dimensiones del
-   Artículo 2 con dirección teórica). Parametrización alternativa:
-   anclas empíricas del Artículo 2 (`Anchors.ARTICULO2`).
+   cuestionario → z es `latent.latent_from_dimensions` (7 dimensiones de
+   la taxonomía difusa-OWA con dirección teórica). Parametrización
+   alternativa: anclas empíricas de la taxonomía difusa-OWA (`Anchors.TAXONOMY`).
 
 2. **Entrada de criterios financieros por acción.** Matriz de decisión
    [activos × 4] normalizada (fase 3).
@@ -22,7 +22,7 @@ Arquitectura de cinco componentes (anteproyecto, Obj. 3), versión 2:
    agresivo) con volatilidad objetivo
    `σ_k = σ_def + orness_k · (σ_agg − σ_def)`.
    Garantiza Spearman(orness, σ) = +1 **por construcción**, corrigiendo la
-   inversión conductual de la vía de criterios pura (hallazgo del Art. 3).
+   inversión conductual de la vía de criterios pura (hallazgo documentado en repo_OWA).
 
 5. **Capa de adaptabilidad — el decisor manda (v2.1).** Dos canales:
 
