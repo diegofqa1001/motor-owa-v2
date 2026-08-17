@@ -27,6 +27,21 @@ prospectiva (Tversky & Kahneman, 1992): una perdida inesperada reduce el
 apetito de riesgo mas de lo que una ganancia equivalente lo aumenta;
 (iii) tanh impide que un unico periodo extremo dispare migraciones de mas
 de ~1 octil (estabilidad, sin recategorizaciones erraticas).
+
+Estatus epistemico de esta regla (aclaracion 2026-08-17): esta actualizacion
+NO es una afirmacion del autor sobre como reaccionan o deben reaccionar los
+inversores ante ganancias y perdidas -- es un supuesto de conveniencia
+computacional, explicito y citado (Tversky & Kahneman, 1992), usado
+UNICAMENTE cuando no hay una declaracion real del decisor disponible (p. ej.
+backtesting a gran escala, poblaciones sinteticas del experimento OE4-E; ver
+elicitation.simulate_declared_scores). El mecanismo canonico y
+ontologicamente neutral del motor es el canal DECLARADO
+(harvest_and_recalibrate con declared_scores): el inversor mismo informa
+como cambio su percepcion de riesgo, en cualquier direccion, y el modelo
+integra esa declaracion sin imponerle ninguna ley psicologica propia. La
+regla automatica de este modulo sirve como PATRON DE COMPARACION -- la
+"prediccion logica" contra la que se mide la brecha emocional epsilon --
+no como el comportamiento recomendado ni esperado del inversor.
 """
 from __future__ import annotations
 

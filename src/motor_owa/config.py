@@ -66,8 +66,12 @@ class EngineConfig:
     kappa : float
         Ganancia de aprendizaje de la actualizacion latente (0 = estatico).
     loss_lambda : float
-        Asimetria de aversion a la perdida en la actualizacion latente
-        (Tversky & Kahneman, 1992 estiman ~2.25).
+        Asimetria de aversion a la perdida del CANAL AUTOMATICO de
+        recalibracion (Tversky & Kahneman, 1992 estiman ~2.25). Es un
+        supuesto de conveniencia usado solo cuando no hay declaracion real
+        del decisor (ver adaptive.py); no es una afirmacion sobre como
+        "deben" reaccionar los inversores -- el canal declarado es el
+        mecanismo canonico y no depende de este parametro.
     tc_bps : float
         Costos de transaccion en puntos basicos por rebalanceo.
     seed : int

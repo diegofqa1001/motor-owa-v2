@@ -26,6 +26,15 @@ Sin datos de campo (que requieren aval etico), la validacion interna del
 Obj. 4 usa DECISORES SINTETICOS (simulate_declared_scores) con un
 generador emocional controlado: si el pipeline recupera los parametros
 sembrados, el mecanismo de medicion queda validado internamente.
+
+Estatus epistemico (aclaracion 2026-08-17): el canal DECLARADO de este
+modulo es el mecanismo canonico y ontologicamente neutral del motor -- no
+asume ninguna direccion ni magnitud de reaccion ante ganancias o perdidas,
+solo integra lo que el propio inversor declara, sea cual sea. El canal
+automatico de adaptive.py (con su asimetria fija de aversion a la perdida)
+es, en cambio, un supuesto de conveniencia citado (T&K, 1992) que opera
+solo cuando no hay declaracion real disponible; no debe leerse como una
+afirmacion del autor sobre como "deben" reaccionar los inversores.
 """
 from __future__ import annotations
 

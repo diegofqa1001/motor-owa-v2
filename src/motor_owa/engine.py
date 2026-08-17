@@ -77,7 +77,10 @@ class RecommendationEngine:
         construye la EVALUACION resultado-vs-proyeccion que se muestra al
         decisor. Si el decisor re-responde el cuestionario
         (``declared_scores``), su declaracion reclasifica el perfil y se
-        registra la brecha emocional; si no, opera el canal automatico.
+        registra la brecha emocional; si no, opera el canal automatico
+        como supuesto de conveniencia (no como recomendacion de cuanto
+        riesgo "deberia" tomar el inversor) -- ver adaptive.py y
+        elicitation.py para el estatus epistemico de cada canal.
         """
         prof_before = state.profile.name
         wealth_before = state.wealth
