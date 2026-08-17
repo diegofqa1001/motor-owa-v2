@@ -18,5 +18,5 @@
 | Liquidez/estabilidad | volumen medio o estabilidad de la vol | directa |
 
 **Calidad.** Se exige ≥ 80 % de datos válidos por columna; activos deslistados
-se excluyen (p. ej., PFBCOLOM.CL en el Artículo 3). El mercado CO es pequeño y
+se excluyen (p. ej., PFBCOLOM.CL, ver repo_OWA). El mercado CO es pequeño y
 correlacionado: se documenta como limitación (perfiles pueden solaparse).
