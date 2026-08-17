@@ -1,7 +1,7 @@
 """Datos de mercado: universos CO (BVC) y US via yfinance, con fallback CSV.
 
-Default del motor v2 (decision 2026-07-04): datos REALES CO + US, como en el
-Articulo 3. Si no hay red, ``load_csv`` permite reproducir con archivos
+Default del motor v2 (decision 2026-07-04): datos REALES CO + US, como en
+repo_OWA. Si no hay red, ``load_csv`` permite reproducir con archivos
 locales (data/*.csv con columna Date + una columna por ticker), y
 ``simulate_market`` genera un panel GBM multivariado SOLO para pruebas
 unitarias y demos offline (etiquetado como sintetico, nunca para resultados).
