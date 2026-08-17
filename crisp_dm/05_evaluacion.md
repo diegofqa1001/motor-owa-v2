@@ -18,7 +18,7 @@
 coherencia orness-vol = **+1.000**; NDCG@k ≈ 0.90–0.96; consistencia
 ordinal ≈ 0.77–0.89. El retorno realizado **no** es monótono en muestras
 cortas: el premio al riesgo es potencial, no garantizado (consistente con el
-hallazgo del Artículo 3: la dimensión robusta de coherencia es la volatilidad).
+hallazgo documentado en repo_OWA: la dimensión robusta de coherencia es la volatilidad).
 
 **Criterios adicionales declarados:** estabilidad ordinal entre particiones,
 sensibilidad al cambio de perfil (matriz de migraciones del módulo
