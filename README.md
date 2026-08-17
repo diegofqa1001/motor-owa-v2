@@ -27,6 +27,18 @@ conductuales de riesgo* (Universidad Nacional de Colombia, Sede Manizales).
 4. **Valida** internamente según el anteproyecto: RMSE, MAE, MAPE, NDCG@k,
    MRR, consistencia ordinal, partición 70-20-10, coherencia Spearman.
 
+> **Nota de verificación (añadida 2026-08-17).** La coherencia riesgo-perfil
+> "+1 por construcción" (punto 2) está CONDICIONADA a que la volatilidad del
+> estrato agresivo supere la del defensivo en la ventana evaluada
+> (`sigma_agg > sigma_def`); ese supuesto es empíricamente muy probable pero
+> no está garantizado por construcción. `common_vol_range()` aplica ahora una
+> cota de seguridad para el caso en que se viole, y cuenta cuántas veces se
+> activa (`PortfolioBuilder.vol_range_violations`). `scripts/verify_vol_range_real_data.py`
+> reejecuta el backtest de panel completo sobre datos reales de EE. UU. y
+> Colombia (2015-2026): 0 activaciones en las 90 ventanas evaluadas (44 EE. UU.
+> + 46 Colombia) — las cifras de coherencia publicadas en la tesis no cambian,
+> y la frecuencia real de la excepción queda documentada en vez de asumida.
+
 ## Estructura (CRISP-DM)
 
 ```
@@ -46,15 +58,18 @@ src/motor_owa/
   data.py            yfinance CO/US, CSV, panel sintético (solo tests)
   viz.py             figuras Okabe-Ito, fondo blanco, 300 dpi
 scripts/run_demo.py  demo de un comando
-tests/               49 pruebas pytest
+scripts/verify_vol_range_real_data.py  Hallazgo 3: cota de seguridad de
+                      common_vol_range() sobre datos reales
+tests/               51 pruebas pytest
 ```
 
 ## Inicio rápido
 
 ```bash
 pip install -e ".[data,dev]"
-pytest                      # 49 tests
+pytest                      # 51 tests
 python scripts/run_demo.py            # demo offline (panel sintético)
+python scripts/verify_vol_range_real_data.py  # Hallazgo 3: cota de seguridad, datos reales
 python scripts/run_demo.py --market co   # Colombia (BVC, anteproyecto)
 python scripts/run_demo.py --market us   # EE. UU. (robustez)
 ```
