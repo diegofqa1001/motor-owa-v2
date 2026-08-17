@@ -27,9 +27,17 @@ Etapa 2 - ASIGNACION CON VOLATILIDAD OBJETIVO (correccion de coherencia):
     lideres del ranking; theta se resuelve por biseccion para que
     sigma_p(w) = sigma_k. Como sigma_p(w(theta)) es continua y creciente
     en theta, la volatilidad realizada de las 8 carteras es monotona en
-    el orness: Spearman(orness, vol) = +1 por diseno (garantia, no
-    resultado empirico). A mayor riesgo aceptado, mayor retorno POTENCIAL
-    (prima de riesgo), nunca garantizado.
+    el orness: Spearman(orness, vol) = +1 por diseno, CONDICIONADO a que
+    sigma_agg > sigma_def en la ventana (garantia estructural, sujeta a
+    esa premisa empirica sobre la matriz de covarianzas del universo; no
+    es un resultado incondicional). common_vol_range() aplica una cota
+    de seguridad (sigma_agg >= 1.5*sigma_def) para el caso, posible en
+    mercados concentrados o episodios de estres, en que la diversificacion
+    del estrato agresivo reduzca su volatilidad de cartera por debajo de
+    la del estrato defensivo; ver PortfolioBuilder.vol_range_violations
+    para la frecuencia con la que esa cota se activo en una corrida dada.
+    A mayor riesgo aceptado, mayor retorno POTENCIAL (prima de riesgo),
+    nunca garantizado.
 """
 from __future__ import annotations
 
@@ -98,6 +106,11 @@ class PortfolioBuilder:
         self.prices = prices
         self.volumes = volumes
         self.cfg = config or EngineConfig()
+        #: numero de ventanas en las que common_vol_range() debio aplicar
+        #: la cota de seguridad porque sigma_agg <= sigma_def antes de
+        #: corregir (diagnostico de la premisa de la garantia de diseno).
+        self.vol_range_violations = 0
+        self.vol_range_calls = 0
 
     # ---------------- Etapa 1: seleccion OWA ----------------
     def owa_scores(self, profile: Profile, t: int) -> pd.Series:
@@ -131,6 +144,21 @@ class PortfolioBuilder:
         a vol del estrato alto), de modo que la volatilidad objetivo
         sigma_k = sigma_def + alpha_k (sigma_agg - sigma_def) sea
         ESTRICTAMENTE creciente en el orness para todos los perfiles.
+
+        Nota de robustez (revision postdoctoral 2026-08-17): la monotonia
+        de sigma_k en alpha_k requiere sigma_agg > sigma_def. Esa
+        desigualdad es empiricamente muy probable (el fondo agresivo se
+        construye sobre el estrato de mayor volatilidad individual) pero
+        no esta garantizada por construccion: en mercados concentrados o
+        episodios de estres, la estructura de covarianzas puede hacer que
+        el fondo "agresivo" termine con MENOR volatilidad de cartera que
+        el "defensivo" (p. ej. si el estrato defensivo queda poco
+        diversificado y correlacionado). Antes de esta correccion, esa
+        ventana habria invertido silenciosamente la monotonia objetivo
+        para esa fecha. Se aplica aqui la misma salvaguarda que ya existe
+        en feasible_vol_range() (sigma_max >= 1.5*sigma_min), y se cuenta
+        cuantas veces se activa (self.vol_range_violations) para que la
+        frecuencia real de la excepcion quede documentada, no oculta.
         """
         if getattr(self, "_range_cache", None) and t in self._range_cache:
             return self._range_cache[t]
@@ -148,7 +176,13 @@ class PortfolioBuilder:
             w_agg[idx[a]] = float(vols[a])
         w_def = _cap_and_norm(w_def, self.cfg.max_weight)
         w_agg = _cap_and_norm(w_agg, self.cfg.max_weight)
-        rng = (_portfolio_vol(w_def, cov), _portfolio_vol(w_agg, cov))
+        s_def = _portfolio_vol(w_def, cov)
+        s_agg = _portfolio_vol(w_agg, cov)
+        self.vol_range_calls += 1
+        if s_agg <= s_def:
+            self.vol_range_violations += 1
+            s_agg = s_def * 1.5   # misma cota que feasible_vol_range()
+        rng = (s_def, s_agg)
         if not hasattr(self, "_range_cache"):
             self._range_cache = {}
         self._range_cache[t] = rng

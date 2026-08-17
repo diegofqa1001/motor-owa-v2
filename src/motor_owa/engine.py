@@ -174,7 +174,9 @@ class RecommendationEngine:
                     pd.Series(sv).rank().values, pd.Series(sw).rank().values),
             }
         metrics["per_profile"] = per_profile
-        # --- coherencia conductual (garantizada por diseno) ---
+        # --- coherencia conductual (garantia de diseno condicionada a
+        #     sigma_agg > sigma_def por ventana; ver PortfolioBuilder.
+        #     vol_range_violations y portfolio.py, common_vol_range) ---
         alphas = [p.alpha for p in self.profiles]
         mean_vol = [float(np.mean(vol_track[p.name])) for p in self.profiles]
         mean_ret = [float(np.mean(ret_track[p.name])) for p in self.profiles]
