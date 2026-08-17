@@ -2,7 +2,7 @@
 
 Implementa EXACTAMENTE lo declarado: RMSE, MAE, MAPE, consistencia ordinal,
 NDCG@k, MRR, particion 70-20-10, mas la metrica de coherencia conductual
-(Spearman orness-volatilidad) que es el eje del Articulo 3.
+(Spearman orness-volatilidad) que es el eje del hallazgo documentado en repo_OWA.
 """
 from __future__ import annotations
 
@@ -102,6 +102,6 @@ def coherence_spearman(orness_values: Sequence[float],
     """Coherencia conductual: Spearman(orness de los perfiles, metrica realizada).
 
     +1 = perfectamente coherente (el riesgo crece con el apetito declarado);
-    -1 = invertida (hallazgo de la via de criterios pura, Articulo 3).
+    -1 = invertida (hallazgo de la via de criterios pura, ver repo_OWA).
     """
     return spearman(orness_values, realized_metric)
