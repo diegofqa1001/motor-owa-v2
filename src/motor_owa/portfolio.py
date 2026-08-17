@@ -36,6 +36,9 @@ Etapa 2 - ASIGNACION CON VOLATILIDAD OBJETIVO (correccion de coherencia):
     del estrato agresivo reduzca su volatilidad de cartera por debajo de
     la del estrato defensivo; ver PortfolioBuilder.vol_range_violations
     para la frecuencia con la que esa cota se activo en una corrida dada.
+    Verificacion empirica (scripts/verify_vol_range_real_data.py, datos
+    reales 2015-2026): 0 activaciones en 90 ventanas (44 EE. UU. + 46
+    Colombia) -- la premisa se sostuvo en todos los casos observados.
     A mayor riesgo aceptado, mayor retorno POTENCIAL (prima de riesgo),
     nunca garantizado.
 """
