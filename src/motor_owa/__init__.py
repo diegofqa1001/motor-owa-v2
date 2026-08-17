@@ -8,7 +8,7 @@ Version 2, independiente del paquete anterior ``owa-adaptive``. Novedades:
 
 1. Anclaje matematico de los 8 perfiles: latente z ~ N(0,1), octiles,
    orness_k = Phi(z_k) = (2k-1)/16 (derivado, no asertado). Se conserva
-   la parametrizacion del Articulo 2 (0.158-0.865) como alternativa.
+   la parametrizacion de la taxonomia difusa-OWA (0.158-0.865) como alternativa.
 2. Carteras coherentes por construccion: 8 carteras (una por perfil) con
    volatilidad objetivo monotona en el orness (mayor apetito de riesgo
    => mayor volatilidad => mayor retorno potencial).
