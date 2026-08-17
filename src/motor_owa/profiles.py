@@ -1,4 +1,4 @@
-"""Los 8 perfiles conductuales de riesgo (Articulo 2) con anclas derivadas.
+"""Los 8 perfiles conductuales de riesgo (taxonomia difusa-OWA) con anclas derivadas.
 
 Cada perfil expone: nombre, indice k, latente z_k, orness alpha_k, y los
 vectores de pesos OWA para n arbitrario (via cuantificador RIM). El motor
@@ -12,7 +12,7 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-from .config import (Anchors, ARTICULO2_ORNESS, DIMENSIONS as _DIMS,
+from .config import (Anchors, TAXONOMY_ORNESS, DIMENSIONS as _DIMS,
                      PROFILE_NAMES)
 from .latent import octile_orness, octile_z, classify_orness, classify_z
 from .quantifiers import exponent_for_orness, weights_for_orness
@@ -27,7 +27,7 @@ def profile_orness(k: int, anchors: Anchors = Anchors.OCTILES) -> float:
     """Orness del perfil k (1..8) segun la parametrizacion elegida."""
     if anchors == Anchors.OCTILES:
         return octile_orness(k)
-    return ARTICULO2_ORNESS[k - 1]
+    return TAXONOMY_ORNESS[k - 1]
 
 
 @dataclass(frozen=True)
@@ -37,8 +37,8 @@ class Profile:
     Atributos
     ---------
     k : int            indice 1 (Guardian) .. 8 (Visionary)
-    name : str         nombre canonico del Articulo 2
-    z : float          latente representativo (solo anclas OCTILES; NaN si A2)
+    name : str         nombre canonico (taxonomia difusa-OWA)
+    z : float          latente representativo (solo anclas OCTILES; NaN si TAXONOMY)
     alpha : float      orness del perfil
     """
     k: int
