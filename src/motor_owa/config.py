@@ -13,25 +13,26 @@ class Anchors(str, Enum):
                 en octiles; orness_k = Phi(z_k) = (2k-1)/16, k = 1..8.
                 Rango [0.0625, 0.9375], simetrico, neutral en 0.5.
                 (Respuesta metodologica a Leon-Castro, 29-jun-2026.)
-    ARTICULO2 -- anclas empiricas publicadas en el Articulo 2 (en revision):
+    TAXONOMY -- anclas empiricas calibradas en el repositorio de taxonomia
+                difusa-OWA (A-Fuzzy-OWA-Taxonomy-of-Investor-Risk-Profiles):
                 centroides difusos -> orness en [0.158, 0.865], no
-                equiespaciado. Se conserva para reproducir el articulo.
+                equiespaciado. Se conserva para reproducir esos valores.
     """
     OCTILES = "octiles"
-    ARTICULO2 = "articulo2"
+    TAXONOMY = "taxonomy"
 
 
-#: Orness del Articulo 2 (Tabla 4), en orden Guardian -> Visionary.
-ARTICULO2_ORNESS: List[float] = [0.158, 0.257, 0.503, 0.600,
+#: Orness de la taxonomia difusa-OWA (Tabla 4), en orden Guardian -> Visionary.
+TAXONOMY_ORNESS: List[float] = [0.158, 0.257, 0.503, 0.600,
                                  0.647, 0.693, 0.738, 0.865]
 
-#: Nombres canonicos de los 8 perfiles (Articulo 2), conservador -> agresivo.
+#: Nombres canonicos de los 8 perfiles (taxonomia difusa-OWA), conservador -> agresivo.
 PROFILE_NAMES: List[str] = [
     "Guardian", "Sentinel", "Pragmatist", "Analyst",
     "Strategist", "Adventurer", "Innovator", "Visionary",
 ]
 
-#: 7 dimensiones conductuales del Articulo 2 (Tabla 4). direction indica el
+#: 7 dimensiones conductuales de la taxonomia difusa-OWA (Tabla 4). direction indica el
 #: signo teorico sobre el apetito de riesgo (+ sube orness, - baja).
 DIMENSIONS: Dict[str, float] = {
     "risk_tolerance":        +1.0,  # D1  tolerancia al riesgo
@@ -57,7 +58,7 @@ class EngineConfig:
     top_n : int
         Numero de activos que componen cada cartera recomendada.
     max_weight : float
-        Tope de peso por activo (diversificacion; robustez Art. 3).
+        Tope de peso por activo (diversificacion; robustez, ver repo_OWA).
     lookback : int
         Ventana (dias habiles) para estimar criterios y covarianza.
     horizon : int
@@ -84,7 +85,7 @@ class EngineConfig:
     seed: int = 20260704
 
 
-#: Universos de referencia (Articulo 3). CO: BVC via Yahoo Finance (.CL).
+#: Universos de referencia (ver repo_OWA). CO: BVC via Yahoo Finance (.CL).
 TICKERS_CO: List[str] = [
     "ECOPETROL.CL", "ISA.CL", "GEB.CL", "BCOLOMBIA.CL", "PFBCOLOM.CL",
     "GRUPOSURA.CL", "GRUPOARGOS.CL", "CEMARGOS.CL", "NUTRESA.CL",
