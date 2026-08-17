@@ -8,7 +8,7 @@ Etapa 1 - SELECCION (via de criterios del anteproyecto, explicable):
     los top_n activos. Esto conserva la arquitectura aprobada (Obj. 3).
 
 Etapa 2 - ASIGNACION CON VOLATILIDAD OBJETIVO (correccion de coherencia):
-    el hallazgo del Articulo 3 demuestra que la via de criterios, por si
+    el hallazgo documentado en repo_OWA demuestra que la via de criterios, por si
     sola, INVIERTE la coherencia conductual (Spearman orness-vol = -1):
     el orness mide exigencia multicriterio (AND/OR), no aversion al
     riesgo. El motor v2 lo corrige por CONSTRUCCION: a cada perfil se le
@@ -166,7 +166,7 @@ class PortfolioBuilder:
             sigma_k = sigma_def + alpha_k * (sigma_agg - sigma_def).
 
         Esto evita que la seleccion pura por criterios determine el
-        riesgo (inversion conductual demostrada en el Articulo 3).
+        riesgo (inversion conductual documentada en repo_OWA).
         """
         scores = self.owa_scores(profile, t)
         rets_u = self._window(t)[scores.index.tolist()]
