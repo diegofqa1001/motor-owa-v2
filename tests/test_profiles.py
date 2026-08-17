@@ -7,7 +7,7 @@ from motor_owa.owa import orness
 
 
 def test_eight_profiles_ordered():
-    for anchors in (Anchors.OCTILES, Anchors.ARTICULO2):
+    for anchors in (Anchors.OCTILES, Anchors.TAXONOMY):
         profs = all_profiles(anchors)
         assert len(profs) == 8
         alphas = [p.alpha for p in profs]
@@ -21,8 +21,8 @@ def test_octile_anchor_values():
     assert profs[0].name == "Guardian" and profs[7].name == "Visionary"
 
 
-def test_articulo2_anchor_values():
-    profs = all_profiles(Anchors.ARTICULO2)
+def test_taxonomy_anchor_values():
+    profs = all_profiles(Anchors.TAXONOMY)
     assert profs[0].alpha == pytest.approx(0.158)
     assert profs[7].alpha == pytest.approx(0.865)
 
