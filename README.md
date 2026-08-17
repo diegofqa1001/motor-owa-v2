@@ -32,7 +32,7 @@ conductuales de riesgo* (Universidad Nacional de Colombia, Sede Manizales).
 ```
 crisp_dm/            fases 1-6 documentadas (negocio → despliegue)
 src/motor_owa/
-  config.py          anclas (octiles | articulo2), parámetros, universos CO/US
+  config.py          anclas (octiles | taxonomy), parámetros, universos CO/US
   latent.py          espacio latente z: Φ, octiles, clasificación, puente 7D→z
   owa.py             operador OWA, orness, andness
   quantifiers.py     RIM Q(r)=r^β, β exacto para un orness (bisección)
@@ -73,7 +73,7 @@ print(ciclo.portfolio.weights, ciclo.migrated, inv.profile.name)
 
 ## Las dos parametrizaciones de anclas
 
-| k | Perfil | Octiles Φ(z) (default) | Artículo 2 |
+| k | Perfil | Octiles Φ(z) (default) | Taxonomía difusa-OWA |
 |---|---|---|---|
 | 1 | Guardian | 0.0625 | 0.158 |
 | 2 | Sentinel | 0.1875 | 0.257 |
@@ -84,7 +84,8 @@ print(ciclo.portfolio.weights, ciclo.migrated, inv.profile.name)
 | 7 | Innovator | 0.8125 | 0.738 |
 | 8 | Visionary | 0.9375 | 0.865 |
 
-`EngineConfig(anchors=Anchors.ARTICULO2)` reproduce los valores publicados.
+`EngineConfig(anchors=Anchors.TAXONOMY)` reproduce los valores del repositorio
+[A-Fuzzy-OWA-Taxonomy-of-Investor-Risk-Profiles](https://github.com/diegofqa1001/A-Fuzzy-OWA-Taxonomy-of-Investor-Risk-Profiles).
 
 ## Licencia
 
