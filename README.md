@@ -35,9 +35,11 @@ conductuales de riesgo* (Universidad Nacional de Colombia, Sede Manizales).
 > cota de seguridad para el caso en que se viole, y cuenta cuántas veces se
 > activa (`PortfolioBuilder.vol_range_violations`). `scripts/verify_vol_range_real_data.py`
 > reejecuta el backtest de panel completo sobre datos reales de EE. UU. y
-> Colombia (2015-2026): 0 activaciones en las 90 ventanas evaluadas (44 EE. UU.
-> + 46 Colombia) — las cifras de coherencia publicadas en la tesis no cambian,
-> y la frecuencia real de la excepción queda documentada en vez de asumida.
+> Colombia (2015-2026): 0 activaciones en las 83 ventanas de la rejilla
+> (43 EE. UU. + 40 Colombia), sobre el snapshot versionado
+> `validacion-oe4/data/snapshot_oe4` (2015-01-01 a 2026-07-02, SHA-256 en su
+> MANIFEST.json); registro en `results/verificacion_vol_range.csv`. Las cifras
+> de coherencia de toda la rejilla son +1,000 en EE. UU. y en Colombia.
 
 ## Estructura (CRISP-DM)
 
@@ -60,6 +62,8 @@ src/motor_owa/
 scripts/run_demo.py  demo de un comando
 scripts/verify_vol_range_real_data.py  Hallazgo 3: cota de seguridad de
                       common_vol_range() sobre datos reales
+scripts/figuras_cap6.py  Figuras 6.1-6.3 de la monografia (datos reales US
+                      versionados, rotulos en espanol) -> figures/es, results/us
 tests/               51 pruebas pytest
 ```
 
