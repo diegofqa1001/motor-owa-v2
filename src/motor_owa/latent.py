@@ -1,6 +1,6 @@
 """Espacio latente del apetito de riesgo: derivacion matematica de anclas.
 
-Idea central (optimizacion v2, responde a la objecion de Leon-Castro):
+Idea central (seccion 3.6 de la tesis):
 el apetito de riesgo del inversor se modela como una variable latente
 continua z ~ N(0,1) (convencion psicometrica estandar: rasgos latentes
 estandarizados). Los 8 perfiles son los 8 OCTILES de esa latente, y el

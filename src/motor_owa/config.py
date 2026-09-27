@@ -12,7 +12,7 @@ class Anchors(str, Enum):
     OCTILES  -- derivacion matematica (default): latente z ~ N(0,1) dividida
                 en octiles; orness_k = Phi(z_k) = (2k-1)/16, k = 1..8.
                 Rango [0.0625, 0.9375], simetrico, neutral en 0.5.
-                (Respuesta metodologica a Leon-Castro, 29-jun-2026.)
+                Anclas equiespaciadas en probabilidad (seccion 3.6 de la tesis).
     TAXONOMY -- anclas empiricas calibradas en el repositorio de taxonomia
                 difusa-OWA (A-Fuzzy-OWA-Taxonomy-of-Investor-Risk-Profiles):
                 centroides difusos -> orness en [0.158, 0.865], no
