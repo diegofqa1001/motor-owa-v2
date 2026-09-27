@@ -90,8 +90,10 @@ class EngineConfig:
 
 
 #: Universos de referencia (ver repo_OWA). CO: BVC via Yahoo Finance (.CL).
+# Bancolombia cotiza bajo los simbolos de Grupo Cibest (CIBEST.CL, PFCIBEST.CL)
+# desde su reorganizacion societaria; la fuente publica bajo ellos la historia completa.
 TICKERS_CO: List[str] = [
-    "ECOPETROL.CL", "ISA.CL", "GEB.CL", "BCOLOMBIA.CL", "PFBCOLOM.CL",
+    "ECOPETROL.CL", "ISA.CL", "GEB.CL", "CIBEST.CL", "PFCIBEST.CL",
     "GRUPOSURA.CL", "GRUPOARGOS.CL", "CEMARGOS.CL", "NUTRESA.CL",
     "EXITO.CL", "PROMIGAS.CL", "CELSIA.CL", "BOGOTA.CL", "CORFICOLCF.CL",
     "PFDAVVNDA.CL", "MINEROS.CL", "TERPEL.CL",
